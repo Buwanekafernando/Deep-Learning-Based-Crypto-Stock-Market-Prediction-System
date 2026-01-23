@@ -5,3 +5,4 @@ scikit-learn
 yfinance
 tensorflow
 ta
+cse.lk
