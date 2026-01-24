@@ -14,7 +14,7 @@ def fetch_yahoo_stock(symbol="AAPL", start="2019-01-01", end="2024-12-31"):
     data = yf.download(symbol, start=start, end=end)
     file_path = f"{YAHOO_SAVE_PATH}/{symbol}.csv"
     data.to_csv(file_path)
-    print(f"✅ Yahoo stock data saved: {file_path}")
+    print(f" Yahoo stock data saved: {file_path}")
 
 
 def fetch_cse_company(symbol="LOLC.N0000"):
@@ -35,7 +35,7 @@ def fetch_cse_company(symbol="LOLC.N0000"):
     file_path = f"{CSE_SAVE_PATH}/{symbol}_snapshot.csv"
     df.to_csv(file_path, index=False)
 
-    print(f"✅ CSE company snapshot saved: {file_path}")
+    print(f"CSE company snapshot saved: {file_path}")
 
 
 def fetch_cse_market_overview():
@@ -53,7 +53,7 @@ def fetch_cse_market_overview():
     file_path = f"{CSE_SAVE_PATH}/market_overview.csv"
     df.to_csv(file_path, index=False)
 
-    print(f"✅ CSE market overview saved: {file_path}")
+    print(f" CSE market overview saved: {file_path}")
 
 def fetch_cse_top_gainers(limit=10):
     client = CSEClient()
@@ -72,7 +72,7 @@ def fetch_cse_top_gainers(limit=10):
     file_path = f"{CSE_SAVE_PATH}/top_gainers.csv"
     df.to_csv(file_path, index=False)
 
-    print(f"✅ CSE top gainers saved: {file_path}")
+    print(f" CSE top gainers saved: {file_path}")
 
 if __name__ == "__main__":
     fetch_yahoo_stock("AAPL")
