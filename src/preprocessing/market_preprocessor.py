@@ -4,12 +4,12 @@ from sklearn.preprocessing import MinMaxScaler
 
 
 class MarketPreprocessor:
-    # Initialize the preprocessor with a window size
+    #initialize the preprocessor with a window size
     def __init__(self,window_size=60):
         self.window_size = window_size
         self.scaler = MinMaxScaler()
     
-    # Add technical indicators to the dataframe
+    #add technical indicators to the dataframe
     def add_technical_indicators(self,df):
         df["EMA_20"] = ta.trend.EMAIndicator(df["Close"], window=20).ema_indicator()
         df["RSI_14"] = ta.momentum.RSIIndicator(df["Close"], window=14).rsi()
@@ -20,11 +20,11 @@ class MarketPreprocessor:
 
         return df.dropna().reset_index(drop=True) 
 
-    # Scale the data
+    #scale the data
     def scale(self, data:pd.DataFrame) -> np.ndarray:
         return self.scaler.fit_transform(data)
     
-    # Create sequences for the data
+    #create sequences for the data
     def create_sequences(self,data:np.ndarray) -> tuple[np.ndarray,np.ndarray]:
         # xs is the input sequence and ys is the output sequence
         xs,ys = [],[]
