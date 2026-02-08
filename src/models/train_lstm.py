@@ -9,21 +9,26 @@ MODEL_SAVE_PATH = "models_saved/lstm/lstm_prod_model.h5"
 
 
 def run_training():
-    #load data
-    df = pd.read_csv(DATA_PATH)
+    # load data (skip the first two rows which are metadata)
+    df = pd.read_csv(DATA_PATH, skiprows=2)
+    
+    # Rename columns to standard names
+    # AAPL.csv has: Date,Close,High,Low,Open,Volume (after skipping 2 rows)
+    df.columns = ["Date", "Close", "High", "Low", "Open", "Volume"]
+    
     df["Date"] = pd.to_datetime(df["Date"])
-    #sort data by date
+    # sort data by date
     df = df.sort_values("Date").reset_index(drop=True)
-    #select features
-    df = df[["Open", "High", "Low", "Close", "Volume"]]
+    # select features
+    df = df[["Date", "Open", "High", "Low", "Close", "Volume"]]
     
 
     #add technical indicators
     preprocessor = MarketPreprocessor(window_size=60)
     df = preprocessor.add_technical_indicators(df)
 
-    #scale the data
-    features = df.columns.tolist()
+    #scale the data - exclude Date
+    features = [c for c in df.columns if c != "Date"]
     scaled_data = preprocessor.scale(df[features])
     X, y = preprocessor.create_sequences(scaled_data)
 
