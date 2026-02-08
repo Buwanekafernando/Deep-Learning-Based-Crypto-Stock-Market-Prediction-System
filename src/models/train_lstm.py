@@ -12,8 +12,7 @@ def run_training():
     # load data (skip the first two rows which are metadata)
     df = pd.read_csv(DATA_PATH, skiprows=2)
     
-    # Rename columns to standard names
-    # AAPL.csv has: Date,Close,High,Low,Open,Volume (after skipping 2 rows)
+    # name columns to standard names
     df.columns = ["Date", "Close", "High", "Low", "Open", "Volume"]
     
     df["Date"] = pd.to_datetime(df["Date"])
@@ -39,7 +38,7 @@ def run_training():
     train_lstm(model, X_train, y_train)
 
     model.save(MODEL_SAVE_PATH)
-    print("✅ Model trained and saved successfully")
+    print("Model trained and saved successfully")
 
 
 if __name__ == "__main__":
