@@ -1,5 +1,6 @@
 import pandas as pd 
 import numpy as np 
+import joblib 
 
 from src.preprocessing.market_preprocessor import MarketPreprocessor
 from src.models.deep_learning.lstm_model import build_lstm, train_lstm
@@ -36,6 +37,7 @@ def run_training():
 
     model = build_lstm(input_shape=(X_train.shape[1], X_train.shape[2]))
     train_lstm(model, X_train, y_train)
+    joblib.dump(preprocessor.scaler, "models_saved/lstm/scaler.pkl")
 
     model.save(MODEL_SAVE_PATH)
     print("Model trained and saved successfully")
