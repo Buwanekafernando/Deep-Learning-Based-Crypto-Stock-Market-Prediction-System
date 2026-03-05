@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 app = FastAPI(title="Crypto Market Prediction API")
 
 
-@app.websocket("/ws/market")
+@app.websocket("/market")
 async def market_ws(websocket: WebSocket):
     """
     WebSocket endpoint for live market data and predictions.
