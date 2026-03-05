@@ -5,4 +5,10 @@ scikit-learn
 yfinance
 tensorflow
 ta
-cse.lk
+requests
+joblib
+fastapi
+uvicorn[standard]
+websockets
+python-dotenv
+pydantic

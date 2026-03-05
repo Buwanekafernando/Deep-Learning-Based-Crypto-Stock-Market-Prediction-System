@@ -1,12 +1,16 @@
-import pandas as pd 
-import numpy as np 
-import joblib 
+import os
+import pandas as pd
+import numpy as np
+import joblib
 
 from src.preprocessing.market_preprocessor import MarketPreprocessor
 from src.models.deep_learning.lstm_model import build_lstm, train_lstm
+from src.features.technical_indicators import FEATURE_COLUMNS
 
 DATA_PATH = "data/raw/stocks/AAPL.csv"
 MODEL_SAVE_PATH = "models_saved/lstm/lstm_prod_model.h5"
+SCALER_SAVE_PATH = "models_saved/lstm/scaler.pkl"
+CLOSE_INDEX = FEATURE_COLUMNS.index("Close")   # 3
 
 
 def run_training():
@@ -30,17 +34,20 @@ def run_training():
     #scale the data - exclude Date
     features = [c for c in df.columns if c != "Date"]
     scaled_data = preprocessor.scale(df[features])
-    X, y = preprocessor.create_sequences(scaled_data)
+    X, y_full = preprocessor.create_sequences(scaled_data)
+    y = y_full[:, CLOSE_INDEX]   # predict Close price only
 
     split = int(len(X) * 0.8)
     X_train, y_train = X[:split], y[:split]
 
+    # input_shape = (window_size, n_features); output = 1 (Close price)
     model = build_lstm(input_shape=(X_train.shape[1], X_train.shape[2]))
     train_lstm(model, X_train, y_train)
-    joblib.dump(preprocessor.scaler, "models_saved/lstm/scaler.pkl")
 
+    os.makedirs(os.path.dirname(MODEL_SAVE_PATH), exist_ok=True)
     model.save(MODEL_SAVE_PATH)
-    print("Model trained and saved successfully")
+    joblib.dump(preprocessor.scaler, SCALER_SAVE_PATH)
+    print(f"Model saved to '{MODEL_SAVE_PATH}', scaler to '{SCALER_SAVE_PATH}'")
 
 
 if __name__ == "__main__":

@@ -12,7 +12,7 @@ def build_lstm(input_shape):
         LSTM(units=50, return_sequences=False),
         Dropout(0.2),
         Dense(units=25),
-        Dense(units=input_shape[1])  # Assuming we want to predict all input features
+        Dense(units=1),               # Predict Close price only
     ])
     
     model.compile(optimizer='adam', loss='mean_squared_error')
