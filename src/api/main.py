@@ -9,8 +9,8 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.api.websocket__server import app as ws_app           # WebSocket route
-from src.api.routes.predict import router as predict_router   # REST predict route
+from src.api.websocket__server import router as ws_router           # WebSocket route
+from src.api.routes.predict import router as predict_router     # REST predict route
 
 logging.basicConfig(level=logging.INFO)
 
@@ -34,7 +34,7 @@ app.add_middleware(
 
 # Mount sub-routers
 app.include_router(predict_router)
-app.mount("/ws", ws_app)
+app.include_router(ws_router, prefix="/ws")
 
 
 @app.get("/", tags=["health"])

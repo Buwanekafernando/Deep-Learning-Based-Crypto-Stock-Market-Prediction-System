@@ -1,15 +1,14 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-import asyncio
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 import logging
 
 from src.realtime.streaming_engine import stream_market
 
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Crypto Market Prediction API")
+router = APIRouter()
 
 
-@app.websocket("/market")
+@router.websocket("/market")
 async def market_ws(websocket: WebSocket):
     """
     WebSocket endpoint for live market data and predictions.
@@ -24,3 +23,12 @@ async def market_ws(websocket: WebSocket):
     except Exception as exc:
         logger.error("Unhandled WebSocket error: %s", exc)
         await websocket.close(code=1011)
+
+
+@router.get("/market")
+async def websocket_info():
+    """Helpful message if accessed via HTTP GET instead of WebSocket."""
+    return {
+        "message": "This endpoint is for WebSockets. Please connect using a WebSocket client.",
+        "url": "ws://localhost:8000/ws/market",
+    }
